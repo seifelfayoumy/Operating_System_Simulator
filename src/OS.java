@@ -2,54 +2,39 @@ import java.util.ArrayList;
 import java.util.Queue;
 
 public class OS {
-    Object[] memory;
-    int memoryPointer = 0;
-    int processIdCounter = 0;
-    int roundRobinTime =0;
+    Memory memory;
+    int memoryPointer;
+    int processIdCounter;
+    int roundRobinTime;
     PCB runningProcess;
-    Queue<PCB> readyQueue;
-    Queue<PCB> blockedQueue;
+    static Mutex userInput = new Mutex();
+    static Mutex userOutput = new Mutex();
+    static Mutex file = new Mutex();
+
+
+    public OS() {
+        this.memory = new Memory(40);
+        this.processIdCounter = 0;
+    }
 
 
     public void addProcess(String[] programLines) {
-        int processLength = programLines.length + 1 + 3;
-
-        if(memoryPointer < (40 - processLength)){
-            //store in disk later
-        }else{
-            int min = memoryPointer;
-            int max = memoryPointer + processLength;
-            PCB pcb = new PCB(processIdCounter,"ready",memoryPointer, new int[]{min, max});
-            processIdCounter += 1;
-            memory[memoryPointer] = pcb;
-            memory[memoryPointer + 1] = "var_1";
-            memory[memoryPointer + 2] = "var_2";
-            memory[memoryPointer + 3] = "var_3";
-            memoryPointer += 4;
-            for(int i=0;i<programLines.length;i++){
-                memory[memoryPointer] = programLines[i];
-                memoryPointer += 1;
-            }
-            readyQueue.add(pcb);
+        int processLength = programLines.length + 3;
+        PCB pcb = new PCB(this.processIdCounter, "ready", 0, new MemoryBoundary(0, processLength - 1));
+        this.memory.addPCB(pcb, 0);
+        this.memory.allocate(new MemoryWord("var_1", null), 12);
+        this.memory.allocate(new MemoryWord("var_2", null), 13);
+        this.memory.allocate(new MemoryWord("var_3", null), 14);
+        for (int i = 15; i < programLines.length + 15; i++) {
+            this.memory.allocate(new MemoryWord("line_" + i, programLines[i]), i);
         }
 
     }
 
     //USE MEMORY INSTEAD TO STORE QUEUES AND PCBS THEN USER INSTRUCTIONS AND VARIABLES
-    public int getNextInstruction(){
-        if(roundRobinTime > 1){
-            runningProcess = this.readyQueue.remove();
-            int next = runningProcess.programCounter;
-            roundRobinTime = 0;
-            runningProcess.programCounter+= 1;
-            runningProcess.processState = "running";
-
-        }else{
-
-        }
-        return 0;
+    public int getNextInstruction() {
+        return -1;
     }
-
 
 
 }

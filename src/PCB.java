@@ -1,11 +1,11 @@
 public class PCB {
-    int processId;
+     int processID;
     String processState;
     int programCounter;
-    int[] memoryBoundaries;
+    MemoryBoundary memoryBoundaries;
 
-    public PCB(int processId, String processState, int programCounter, int[] memoryBoundaries){
-        this.processId = processId;
+    public PCB(int processID, String processState, int programCounter, MemoryBoundary memoryBoundaries){
+        this.processID = processID;
         this.processState = processState;
         this.programCounter = programCounter;
         this.memoryBoundaries = memoryBoundaries;
