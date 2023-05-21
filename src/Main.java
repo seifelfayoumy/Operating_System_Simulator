@@ -5,5 +5,6 @@ public class Main {
 
 //        ArrayList<String> = Interpreter.readProgram("programs/Program_1.txt");
 //        System.out.println();
+        OS os = new OS(2, 40);
     }
 }

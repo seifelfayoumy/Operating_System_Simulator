@@ -50,10 +50,31 @@ public class Memory {
     }
 
     public void addPCB(PCB pcb, int index) {
-        this.allocate(new MemoryWord("processID", pcb.processID), index);
-        this.allocate(new MemoryWord("processState", pcb.processState), index + 1);
-        this.allocate(new MemoryWord("programCounter", pcb.programCounter), index + 2);
-        this.allocate(new MemoryWord("memoryBoundaries", pcb.memoryBoundaries), index + 3);
+        boolean exists = false;
+        for (int i = 0; i < this.memory.length; i++) {
+            if (this.memory[i].variable.equals("processID") && this.memory[i].data.equals(pcb.processID)) {
+                this.allocate(new MemoryWord("processID", pcb.processID), i);
+                this.allocate(new MemoryWord("processState", pcb.processState), i + 1);
+                this.allocate(new MemoryWord("programCounter", pcb.programCounter), i + 2);
+                this.allocate(new MemoryWord("memoryBoundaries", pcb.memoryBoundaries), i + 3);
+                exists = true;
+            }
+        }
+        if (!exists) {
+            this.allocate(new MemoryWord("processID", pcb.processID), index);
+            this.allocate(new MemoryWord("processState", pcb.processState), index + 1);
+            this.allocate(new MemoryWord("programCounter", pcb.programCounter), index + 2);
+            this.allocate(new MemoryWord("memoryBoundaries", pcb.memoryBoundaries), index + 3);
+        }
+    }
+
+    public PCB getPcb(int processID) {
+        for (int i = 0; i < this.memory.length; i++) {
+            if (this.memory[i].variable.equals("processID") && this.memory[i].data.equals(processID)) {
+                return new PCB(processID, (String) this.memory[i + 1].data, (int) this.memory[i + 2].data, (MemoryBoundary) this.memory[i + 3].data);
+            }
+        }
+        return null;
     }
 
 
