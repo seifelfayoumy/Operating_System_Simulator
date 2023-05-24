@@ -11,7 +11,7 @@ public class OS {
     Mutex userOutput;
     Mutex file;
 
-    Queue<Process> blockedQueue;
+    Queue<Integer> blockedQueue;
     Queue<Process> readyQueue;
     Process runningProcess;
     int timeSlice;
@@ -42,22 +42,14 @@ public class OS {
 
 
     public void addProcess(List<String> programLines) {
-        int processLength = programLines.size() + 3;
-        PCB pcb = new PCB(this.processIdCounter, "ready", 3, new MemoryBoundary(0, processLength - 1));
-        this.memory.addPCB(pcb, this.kernelMemoryPointer);
-        this.kernelMemoryPointer += 4;
-        this.memory.allocate(new MemoryWord("var_1", null), this.userMemoryPointer);
-        this.userMemoryPointer += 1;
-        this.memory.allocate(new MemoryWord("var_2", null), this.userMemoryPointer);
-        this.userMemoryPointer += 1;
-        this.memory.allocate(new MemoryWord("var_3", null), this.userMemoryPointer);
-        this.userMemoryPointer += 1;
-        for (int i = this.userMemoryPointer; i < programLines.size() + this.userMemoryPointer; i++) {
-            this.memory.allocate(new MemoryWord("line_" + i, programLines.get(i)), i);
-            this.userMemoryPointer += 1;
+        if (this.memory.spaceExists(programLines.size() + 3)) {
+            PCB pcb = new PCB(this.processIdCounter, "ready", 3, new MemoryBoundary(0, programLines.size() + 2));
+            this.memory.addProcess(pcb, programLines);
+            this.readyQueue.add(new Process(this.processIdCounter, this.timeSlice));
+            this.processIdCounter += 1;
+        } else {
+            //swap to disk
         }
-        this.readyQueue.add(new Process(this.processIdCounter, this.timeSlice));
-        this.processIdCounter += 1;
     }
 
     public int getNextInstruction() {
@@ -80,35 +72,43 @@ public class OS {
 
     }
 
-    public void semWaitUserInput(int processID){
-        if(this.userInput.semWait(processID) == false){
-            this.blockedQueue.add(new Process(processID, this.timeSlice));
+    public void semWaitUserInput(int processID) {
+        if (!this.userInput.semWait(processID)) {
+            this.blockedQueue.add(processID);
         }
     }
-    public void semWaitUserOutput(int processID){
-        if(this.userOutput.semWait(processID) == false){
-            this.blockedQueue.add(new Process(processID, this.timeSlice));
+
+    public void semWaitUserOutput(int processID) {
+        if (!this.userOutput.semWait(processID)) {
+            this.blockedQueue.add(processID);
         }
     }
-    public void semWaitFile(int processID){
-        if(this.file.semWait(processID) == false){
-            this.blockedQueue.add(new Process(processID, this.timeSlice));
+
+    public void semWaitFile(int processID) {
+        if (!this.file.semWait(processID)) {
+            this.blockedQueue.add(processID);
         }
     }
-    public void semSignalUserInput(int processID){
-       this.userInput.semSignal(processID);
-       int waitingProcess = this.userInput.waiting.remove();
-       this.readyQueue.add(new Process(waitingProcess,this.timeSlice));
+
+    public void semSignalUserInput(int processID) {
+        this.userInput.semSignal(processID);
+        int waitingProcess = this.userInput.waiting.remove();
+        this.blockedQueue.remove(waitingProcess);
+        this.readyQueue.add(new Process(waitingProcess, this.timeSlice));
     }
-    public void semSignalUserOutput(int processID){
+
+    public void semSignalUserOutput(int processID) {
         this.userOutput.semSignal(processID);
         int waitingProcess = this.userOutput.waiting.remove();
-        this.readyQueue.add(new Process(waitingProcess,this.timeSlice));
+        this.blockedQueue.remove(waitingProcess);
+        this.readyQueue.add(new Process(waitingProcess, this.timeSlice));
     }
-    public void semSignalFile(int processID){
+
+    public void semSignalFile(int processID) {
         this.file.semSignal(processID);
         int waitingProcess = this.file.waiting.remove();
-        this.readyQueue.add(new Process(waitingProcess,this.timeSlice));
+        this.blockedQueue.remove(waitingProcess);
+        this.readyQueue.add(new Process(waitingProcess, this.timeSlice));
     }
 
 

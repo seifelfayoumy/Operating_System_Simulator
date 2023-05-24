@@ -7,4 +7,9 @@ public class MemoryBoundary {
         this.end = end;
     }
 
+    public int getLength(){
+        return this.end = this.start;
+    }
+
+
 }
