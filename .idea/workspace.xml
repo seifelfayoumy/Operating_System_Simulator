@@ -5,11 +5,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="409968a3-c10a-44d5-8ae8-74acd13586d9" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/src/MemoryDisk.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Scheduler.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Memory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Memory.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/MemoryBoundary.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/MemoryBoundary.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/MemoryWord.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/MemoryWord.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/MutexManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/disk.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/OS.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/OS.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Scheduler.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/PCB.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/PCB.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -61,7 +65,7 @@
       <option name="presentableId" value="Default" />
       <updated>1684421394634</updated>
       <workItem from="1684421397334" duration="38443000" />
-      <workItem from="1684954002213" duration="5631000" />
+      <workItem from="1684954002213" duration="18005000" />
     </task>
     <servers />
   </component>
