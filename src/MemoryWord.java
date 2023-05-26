@@ -19,7 +19,6 @@ public class MemoryWord {
         List<String> lines = memoryWords.stream()
                 .map(word -> processID + "," + word.variable + "," + word.data)
                 .collect(Collectors.toList());
-
         try {
             Files.write(Paths.get("src/disk.txt"), lines, StandardOpenOption.APPEND);
         } catch (IOException e) {
@@ -43,7 +42,7 @@ public class MemoryWord {
                     .collect(Collectors.toList());
             lines.removeIf(line -> Integer.parseInt(line.split(",")[0]) == processID);
 
-            Files.write(Paths.get("disk.txt"), lines, StandardCharsets.UTF_8);
+            Files.write(Paths.get("src/disk.txt"), lines, StandardCharsets.UTF_8);
         } catch (IOException e) {
             e.printStackTrace();
         }

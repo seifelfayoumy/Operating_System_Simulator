@@ -1,9 +1,16 @@
+import java.util.LinkedList;
 import java.util.Queue;
 
 class Mutex {
-    private boolean isLocked = false;
-    private int lockingProcessId = -1;
+    private boolean isLocked;
+    private int lockingProcessId;
     Queue<Integer> waiting;
+
+    public Mutex(){
+        this.isLocked = false;
+        this.lockingProcessId = -1;
+        this.waiting = new LinkedList<>();
+    }
 
     public boolean semWait(int processId) {
         if (isLocked) {

@@ -50,10 +50,15 @@ public class SystemCalls {
 
     public void writeToMemory(String variableName, Object value) {
         for (int i = pcb.memoryBoundaries.start; i < pcb.memoryBoundaries.start + 3; i++) {
-            if (memory.isEmpty(i)) {
-                if (memory.read(i).variable.equals("var_1") || memory.read(i).variable.equals("var_2") || memory.read(i).variable.equals("var_3"))
-                    memory.allocate(new MemoryWord(variableName, value), i);
+            if (this.memory.read(i) != null && this.memory.read(i).variable.equals(variableName)) {
+                this.memory.allocate(new MemoryWord(variableName, value), i);
+                break;
+            } else if (memory.read(i).variable.equals("var_1") || memory.read(i).variable.equals("var_2") || memory.read(i).variable.equals("var_3")) {
+                this.memory.allocate(new MemoryWord(variableName, value), i);
+                break;
             }
+
+
         }
     }
 
@@ -66,22 +71,27 @@ public class SystemCalls {
         return null;
     }
 
-    public void semWaitUserInput(){
+    public void semWaitUserInput() {
         os.semWaitUserInput(this.pcb.processID);
     }
-    public void semWaitUserOutput(){
+
+    public void semWaitUserOutput() {
         os.semWaitUserOutput(this.pcb.processID);
     }
-    public void semWaitFile(){
+
+    public void semWaitFile() {
         os.semWaitFile(this.pcb.processID);
     }
-    public void semSignalUserInput(){
+
+    public void semSignalUserInput() {
         os.semSignalUserInput(this.pcb.processID);
     }
-    public void semSignalUserOutput(){
+
+    public void semSignalUserOutput() {
         os.semSignalUserOutput(this.pcb.processID);
     }
-    public void semSignalFile(){
+
+    public void semSignalFile() {
         os.semSignalFile(this.pcb.processID);
     }
 

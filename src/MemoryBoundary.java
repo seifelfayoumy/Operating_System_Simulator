@@ -9,8 +9,12 @@ public class MemoryBoundary {
         this.onDisk = false;
     }
 
-    public int getLength(){
-        return this.end = this.start;
+    public int getLength() {
+        return this.end - this.start;
+    }
+
+    public String toString() {
+        return this.start + "," + this.end;
     }
 
 
